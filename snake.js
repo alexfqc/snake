@@ -35,7 +35,8 @@ var Snake ={
         this.height = h-10;
     }
     this.ctx = this.canvas.getContext("2d"),
-    this.ctx.fillStyle = "rgb(0,0,255)";
+    this.ctx.fillStyle = "rgb(80, 237, 213)";
+    this.ctx.strokeStyle = "rgb(96, 175, 255)";
     this.numel = this.sizeX / 10;
     this.setTracePath();
     this.handleEvents(); 
@@ -164,7 +165,8 @@ var Snake ={
         }
         this.headElement = [Snake.endX, Snake.initY];
         Snake.tracePath.push([Snake.endX, Snake.initY]);
-        Snake.ctx.fillRect(Snake.endX, Snake.initY, 10, 10); 
+        Snake.ctx.fillRect(Snake.endX+1, Snake.initY+1, 8, 8); 
+        this.ctx.strokeRect(this.endX+1, this.endY+1, 8, 8); 
       
   },
     
@@ -172,7 +174,8 @@ var Snake ={
     var counter = 0;
     while(counter <= this.sizeX){
         this.tracePath.push([counter, this.initY]); 
-        Snake.ctx.fillRect(counter, Snake.initY, 10, 10); 
+        Snake.ctx.fillRect(counter+1, Snake.initY+1, 8, 8); 
+        Snake.ctx.strokeRect(counter+1, Snake.endY+1, 8, 8); 
         counter = counter + 10;
     }
     
@@ -181,7 +184,8 @@ var Snake ={
   updateTracePath: function(){
       this.headElement = [this.endX, this.endY];
       this.tracePath.push([this.endX, this.endY]);
-      this.ctx.fillRect(this.endX, this.endY, 10, 10); 
+      this.ctx.fillRect(this.endX+1, this.endY+1, 8, 8); 
+      this.ctx.strokeRect(this.endX+1, this.endY+1, 8, 8); 
       
   },
     
