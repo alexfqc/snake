@@ -13,6 +13,7 @@ var Snake ={
   move: 'lr',
   direction:'right',
   canvas : document.getElementById("snake"),
+  canvas2 : document.getElementById("fruit"),
   ctx : undefined,
   btnLeft: 37,
   btnUp: 38,
@@ -21,24 +22,32 @@ var Snake ={
   tracePath: [],
   headElement: undefined,
   endGame : false,
+  fruit:  [],
   
     
   init: function(w,h){
     if(w == undefined || h == undefined){
         this.canvas.setAttribute('width','400');  
         this.canvas.setAttribute('height','400'); 
+        this.canvas2.setAttribute('width','400');  
+        this.canvas2.setAttribute('height','400'); 
     }
     else{
         this.canvas.setAttribute('width', w);  
-        this.canvas.setAttribute('height',h);  
+        this.canvas.setAttribute('height',h);
+        this.canvas2.setAttribute('width', w);  
+        this.canvas2.setAttribute('height',h);  
         this.width = w-10;
         this.height = h-10;
     }
     this.ctx = this.canvas.getContext("2d"),
+    this.ctx2 = this.canvas2.getContext("2d"),
     this.ctx.fillStyle = "rgb(80, 237, 213)";
     this.ctx.strokeStyle = "rgb(96, 175, 255)";
+    
     this.numel = this.sizeX / 10;
     this.setTracePath();
+    this.drawFruit();
     this.handleEvents(); 
     this.animate();
     
@@ -144,6 +153,7 @@ var Snake ={
   removeTail: function(){
       var tail = this.tracePath.shift();
       Snake.ctx.clearRect(tail[0], tail[1], 10, 10); 
+      Snake.ctx2.clearRect(tail[0], tail[1], 10, 10); 
   },
     
   leftToRight: function(){
@@ -203,6 +213,38 @@ var Snake ={
         if(status){
             this.resetGame();
         }
+      
+  },
+    
+  drawFruit: function(){
+      this.setFruitPosition(this.width/10, this.height/10);
+      this.ctx2.fillStyle = "red";
+      this.ctx2.strokeStyle = "pink";
+      this.ctx2.beginPath();
+      this.ctx2.arc(this.fruit[0]*10 + 5,this.fruit[1]*10 + 5,4.4,0,Math.PI*2,true); 
+      this.ctx2.stroke();
+      this.ctx2.fill();
+      
+  },
+    
+  rollDie: function (sides){
+    if(!sides) sides = 6;
+    with(Math) return 1 + floor(random() * sides);
+  },
+    
+  setFruitPosition: function(width, height){
+      var x = this.rollDie(width),
+          y = this.rollDie(height);
+      
+      var result = this.tracePath.every(function(element){
+          return (element[0] != x || element[1] != y);
+      });
+      if(result){
+          this.fruit = [x,y];
+      }
+      else{
+          this.setFruitPosition(min,max);
+      }
       
   },
     
