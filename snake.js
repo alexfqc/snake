@@ -199,7 +199,7 @@ var Snake ={
       
   },
     
-    checkGameStatus: function(){
+  checkGameStatus: function(){
 
         var counter = 0;
         var status = this.tracePath.some(function(element, index){
@@ -209,6 +209,48 @@ var Snake ={
             return counter >= 2;
 
         });
+        if(this.headElement[0] == this.fruit[0] && this.headElement[1] == this.fruit[1]){
+            if(this.direction == 'right'){
+                if(this.endX < this.width){
+                    this.endX = this.endX + 10;
+                }
+                else{
+                    this.endX = 0;
+                }
+                
+            }
+            if(this.direction == 'left'){
+                if(this.endX > 0){
+                    this.endX = this.endX - 10;
+                }
+                else{
+                    this.endX = this.width;
+                }
+                
+            }
+            if(this.direction == 'down'){
+                if(this.endY < this.height){
+                    this.endY = this.endY + 10;
+                }
+                else{
+                    this.endY = 0;
+                }
+                
+            }
+            if(this.direction == 'up'){
+                if(this.endY > 0){
+                    this.endY = this.endY - 10;
+                }
+                else{
+                    this.endY = this.height;
+                }
+                
+            }
+            this.updateTracePath();
+            this.clearFruit();
+            this.drawFruit();
+            
+        }
         
         if(status){
             this.resetGame();
@@ -221,9 +263,14 @@ var Snake ={
       this.ctx2.fillStyle = "red";
       this.ctx2.strokeStyle = "pink";
       this.ctx2.beginPath();
-      this.ctx2.arc(this.fruit[0]*10 + 5,this.fruit[1]*10 + 5,4.4,0,Math.PI*2,true); 
+      this.ctx2.arc(this.fruit[0] + 5,this.fruit[1] + 5,4.4,0,Math.PI*2,true); 
       this.ctx2.stroke();
       this.ctx2.fill();
+      
+  },
+    
+  clearFruit: function(){
+      Snake.ctx2.clearRect(this.fruit[0], this.fruit[1], 10, 10); 
       
   },
     
@@ -240,7 +287,7 @@ var Snake ={
           return (element[0] != x || element[1] != y);
       });
       if(result){
-          this.fruit = [x,y];
+          this.fruit = [x*10,y*10];
       }
       else{
           this.setFruitPosition(min,max);
@@ -260,7 +307,9 @@ var Snake ={
       this.direction ='right';
       this.tracePath = [];
       this.ctx.clearRect(0, 0, this.width, this.height);   
+      this.ctx2.clearRect(0, 0, this.width, this.height); 
       this.setTracePath();
+      this.drawFruit();
       setTimeout(function(){Snake.endGame = false},50);
         
     },
